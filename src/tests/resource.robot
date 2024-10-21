@@ -6,7 +6,7 @@ ${SERVER}    localhost:5001
 ${DELAY}     0.5 seconds
 ${HOME_URL}  http://${SERVER}
 ${BROWSER}   chrome
-# ${BROWSER} firefox
+${HEADLESS}  false
 # robot --variable BROWSER:firefox src/tests 
 
 *** Keywords ***
@@ -16,7 +16,10 @@ Open And Configure Browser
     ELSE IF    $BROWSER == 'firefox'
         ${options}  Evaluate  sys.modules['selenium.webdriver'].FirefoxOptions()  sys
     END
-    # seuraava rivi on kommentoitu toistaiseksi pois
-    Call Method  ${options}  add_argument  --headless
-    Open Browser  browser=${BROWSER}  options=${options}
     Set Selenium Speed  ${DELAY}
+    IF  $BROWSER == 'true'
+        Set Selenium Speed  0
+        Call Method  ${options}  add_argument  --headless
+    END
+    Open Browser  browser=${BROWSER}  options=${options}
+   
